@@ -5,3 +5,5 @@ devbox/.gnupg
 devbox/Downloads
 devbox/.local
 devbox/.mozilla
+devbox/.ssh/
+devbox/Code/
