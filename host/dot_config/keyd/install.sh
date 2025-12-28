@@ -1,16 +1,5 @@
 #!/bin/bash
 
-if command -v chezmoi >/dev/null 2>&1; then
-    rm -rf ~/.config/keyd/
-    echo "Applying chezmoi..."
-    cd /home/rodhfr/.local/share/chezmoi/dot_config/keyd
-    chezmoi apply --force
-    echo "OK."
-else
-    echo "chezmoi is not installed. Skipping."
-fi
-
-
 # Remover arquivos antigos
 echo "Excluding old config..."
 sudo rm -rf /etc/keyd/* 
@@ -25,7 +14,7 @@ echo "OK."
 echo "Installing new .conf, and ./include/* files..."
 
 # copy include files
-for f in "$HOME/.config/keyd/include/"*; do
+for f in "./include/"*; do
     [ -e "$f" ] || continue
     echo "Copying $f to /etc/keyd/"
     sudo ln -s "$f" /etc/keyd/
@@ -33,7 +22,7 @@ done
 echo "OK."
 
 # copy confs
-for f in "$HOME/.config/keyd/"*.conf; do
+for f in "./"*.conf; do
     [ -e "$f" ] || continue
     echo "Copying $f to /etc/keyd/"
     sudo ln -s "$f" /etc/keyd/
