@@ -2,3 +2,5 @@
 env
 devbox/.cache
 devbox/.gnupg
+devbox/Downloads
+devbox/.local
