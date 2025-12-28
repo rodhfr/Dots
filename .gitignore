@@ -1,3 +1,4 @@
 .env
 env
 devbox/.cache
+devbox/.gnupg
