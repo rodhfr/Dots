@@ -19,7 +19,7 @@ set $texteditor nvim
 
 ## Set outputs for individual workspaces
 set $out-main eDP-1
-set $out-external HDMI-A-1
+#set $out-external HDMI-A-1
 
 ## Drag Window Modifier
 floating_modifier $mod
@@ -91,13 +91,13 @@ exec ~/.config/sway/bluetooth/connect/bls-b21
 ########################################################################################
 ############################### Display Output #########################################
 ## Notebook monitor to the left
-output eDP-1 pos 0 0
+#output eDP-1 pos 0 0
 #output eDP-1 disable
 output HDMI-A-1 pos 1920 0 resolution 1920x1080@74.973Hz
 
 # Notebook Monitor to the Right (example)
 # output HDMI-A-1 pos 0 0 resolution 1920x1080@74.973Hz
-# output eDP-1 pos 1920 0
+output eDP-1 pos 1920 0 disable
 
 ## Headless Output Config
 # output HEADLESS-1 resolution 1920x1080@60Hz position 3840 0
@@ -236,27 +236,27 @@ bindsym $mod+Ctrl+i sticky enable, floating enable, resize set width 400px heigh
 
 ## Assign workspaces for defined outputs
 # Main output
-workspace 21 output $out-main
-workspace 22 output $out-main 
-workspace 23 output $out-main 
-workspace 24 output $out-main 
-workspace 25 output $out-main 
-workspace 26 output $out-main 
-workspace 27 output $out-main 
-workspace 28 output $out-main
-workspace 29 output $out-main
-workspace 20 output $out-main
+#workspace 21 output $out-main
+#workspace 22 output $out-main 
+#workspace 23 output $out-main 
+#workspace 24 output $out-main 
+#workspace 25 output $out-main 
+#workspace 26 output $out-main 
+#workspace 27 output $out-main 
+#workspace 28 output $out-main
+#workspace 29 output $out-main
+#workspace 20 output $out-main
 # External output
-workspace 11 output $out-external 
-workspace 12 output $out-external 
-workspace 13 output $out-external 
-workspace 14 output $out-external 
-workspace 15 output $out-external 
-workspace 16 output $out-external 
-workspace 17 output $out-external
-workspace 18 output $out-external
-workspace 19 output $out-external
-workspace 10 output $out-external
+workspace 1 output $out-external 
+workspace 2 output $out-external 
+workspace 3 output $out-external 
+workspace 4 output $out-external 
+workspace 5 output $out-external 
+workspace 6 output $out-external 
+workspace 7 output $out-external
+workspace 8 output $out-external
+workspace 9 output $out-external
+workspace 0 output $out-external
 
 ## Focus: main output
 #bindsym $mod2+1 workspace 21
@@ -271,16 +271,16 @@ workspace 10 output $out-external
 #bindsym $mod2+0 workspace 20
 
 ## Focus: external output
-bindsym $mod+1 workspace 11
-bindsym $mod+2 workspace 12
-bindsym $mod+3 workspace 13
-bindsym $mod+4 workspace 14
-bindsym $mod+5 workspace 15
-bindsym $mod+6 workspace 16
-bindsym $mod+7 workspace 17
-bindsym $mod+8 workspace 18
-bindsym $mod+9 workspace 19
-bindsym $mod+0 workspace 10
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 0
 
 ## Move + focus: main output
 #bindsym $mod2+Shift+1 move container to workspace 21 ; workspace 21
@@ -295,16 +295,16 @@ bindsym $mod+0 workspace 10
 #bindsym $mod2+Shift+0 move container to workspace 20 ; workspace 20
 
 ## Move + focus: external output
-bindsym $mod+Shift+1 move container to workspace 11 ; workspace 11
-bindsym $mod+Shift+2 move container to workspace 12 ; workspace 12
-bindsym $mod+Shift+3 move container to workspace 13 ; workspace 13
-bindsym $mod+Shift+4 move container to workspace 14 ; workspace 14
-bindsym $mod+Shift+5 move container to workspace 15 ; workspace 15
-bindsym $mod+Shift+6 move container to workspace 16 ; workspace 16
-bindsym $mod+Shift+7 move container to workspace 17 ; workspace 17
-bindsym $mod+Shift+8 move container to workspace 18 ; workspace 18
-bindsym $mod+Shift+9 move container to workspace 19 ; workspace 19
-bindsym $mod+Shift+0 move container to workspace 10 ; workspace 10
+bindsym $mod+Shift+1 move container to workspace 1 ; workspace 1
+bindsym $mod+Shift+2 move container to workspace 2 ; workspace 2
+bindsym $mod+Shift+3 move container to workspace 3 ; workspace 3
+bindsym $mod+Shift+4 move container to workspace 4 ; workspace 4
+bindsym $mod+Shift+5 move container to workspace 5 ; workspace 5
+bindsym $mod+Shift+6 move container to workspace 6 ; workspace 6
+bindsym $mod+Shift+7 move container to workspace 7 ; workspace 7
+bindsym $mod+Shift+8 move container to workspace 8 ; workspace 8
+bindsym $mod+Shift+9 move container to workspace 9 ; workspace 9
+bindsym $mod+Shift+0 move container to workspace 0 ; workspace 0
 
 ## Silently move workspaces: main output
 #bindsym $mod2+Ctrl+1 move container to workspace 21
@@ -319,16 +319,16 @@ bindsym $mod+Shift+0 move container to workspace 10 ; workspace 10
 #bindsym $mod2+Ctrl+0 move container to workspace 20
 
 ## Silently move workspaces: external output
-bindsym $mod+Ctrl+1 move container to workspace 11
-bindsym $mod+Ctrl+2 move container to workspace 12
-bindsym $mod+Ctrl+3 move container to workspace 13
-bindsym $mod+Ctrl+4 move container to workspace 14
-bindsym $mod+Ctrl+5 move container to workspace 15
-bindsym $mod+Ctrl+6 move container to workspace 16
-bindsym $mod+Ctrl+7 move container to workspace 17
-bindsym $mod+Ctrl+8 move container to workspace 18
-bindsym $mod+Ctrl+9 move container to workspace 19
-bindsym $mod+Ctrl+0 move container to workspace 10
+bindsym $mod+Ctrl+1 move container to workspace 1
+bindsym $mod+Ctrl+2 move container to workspace 2
+bindsym $mod+Ctrl+3 move container to workspace 3
+bindsym $mod+Ctrl+4 move container to workspace 4
+bindsym $mod+Ctrl+5 move container to workspace 5
+bindsym $mod+Ctrl+6 move container to workspace 6
+bindsym $mod+Ctrl+7 move container to workspace 7
+bindsym $mod+Ctrl+8 move container to workspace 8
+bindsym $mod+Ctrl+9 move container to workspace 9
+bindsym $mod+Ctrl+0 move container to workspace 0
 
 ## Move Focused Window Arrow Keys while mantaining focus
 bindsym $mod+Shift+left mark swap, focus left, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab" 
@@ -523,3 +523,4 @@ client.urgent           #ff0000 #ff0000 #ff0000 #ffffff
 # and nm-applet is the most common system tray GUI for it.
 # For sway, you might want to use sway's waybar or use NetworkManager's applet directly
 #######################################################################################
+
