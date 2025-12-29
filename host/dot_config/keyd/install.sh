@@ -1,38 +1,30 @@
 #!/bin/bash
+set -e
 
-# Remover arquivos antigos
-echo "Excluding old config..."
-sudo rm -rf /etc/keyd/* 
-echo "OK."
-
-# Criar diretórios, se não existirem
-echo "Recreating directory structure..."
+echo "Resetting /etc/keyd..."
+sudo rm -rf /etc/keyd
 sudo mkdir -p /etc/keyd/
-echo "/etc/keyd/ directory created."
 echo "OK."
 
-echo "Installing new .conf, and ./include/* files..."
-
-# copy include files
-for f in "/home/rodhfr/.config/keyd/include/"*; do
+echo "Copying include files..."
+for f in /home/rodhfr/.config/keyd/include/*; do
     [ -e "$f" ] || continue
-    echo "Copying $f to /etc/keyd/"
-    sudo ln -s "$f" /etc/keyd/
+    echo "Copying $(basename "$f")"
+    sudo cp "$f" /etc/keyd/
 done
 echo "OK."
 
-# copy confs
-for f in "/home/rodhfr/.config/keyd/"*.conf; do
+echo "Copying config files..."
+for f in /home/rodhfr/.config/keyd/*.conf; do
     [ -e "$f" ] || continue
-    echo "Copying $f to /etc/keyd/"
-    sudo ln -s "$f" /etc/keyd/
+    echo "Copying $(basename "$f")"
+    sudo cp "$f" /etc/keyd/
 done
 echo "OK."
 
-echo "Restarting Keyd..."
-# Ativar e recarregar o serviço
+echo "Restarting keyd..."
 sudo systemctl enable --now keyd
+sudo systemctl restart keyd
 sudo keyd reload
-echo "OK."
 echo "Done."
 
