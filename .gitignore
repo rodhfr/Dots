@@ -9,3 +9,4 @@ devbox/.ssh/
 devbox/Code/
 devbox/.pki
 devbox/.config/google-chrome/
+devbox/.bash_history
