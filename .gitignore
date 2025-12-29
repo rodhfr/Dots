@@ -7,3 +7,5 @@ devbox/.local
 devbox/.mozilla
 devbox/.ssh/
 devbox/Code/
+devbox/.pki
+devbox/.config/google-chrome/
