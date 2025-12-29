@@ -7,7 +7,6 @@ SCRIPT_DIR=$(dirname "$0")
 # regular container
 distrobox create --hostname devbox --name devbox -i archlinux --home $HOME/Dots/devbox
 
-sleep 3
 # install packages
 distrobox enter devbox -- sudo pacman -Syu --noconfirm git fuzzel wl-clipboard firefox alacritty neovim sway fish waybar ttf-nerd-fonts-symbols ttf-nerd-fonts-symbols-mono ttf-nerd-fonts-symbols-common swaybg tree-sitter-cli fzf fd ttf-font-nerd starship
 
