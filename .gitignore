@@ -10,3 +10,5 @@ devbox/Code/
 devbox/.pki
 devbox/.config/google-chrome/
 devbox/.bash_history
+devbox/.config/go/
+devbox/.config/mozilla/
