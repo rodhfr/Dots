@@ -2,7 +2,7 @@
 ########################################################################################
 ############################# Modifier Keys ############################################
 ## Main Modifier Keys
-set $mod mod1
+set $mod mod4
 #set $mod2 mod4
 # mod4 = super
 # mod1 = alt
@@ -20,6 +20,9 @@ set $texteditor nvim
 ## Set outputs for individual workspaces
 set $out-main eDP-1
 #set $out-external HDMI-A-1
+
+## Set initial workspace
+workspace 1
 
 ## Drag Window Modifier
 floating_modifier $mod
@@ -73,7 +76,7 @@ exec_always "~/.config/sway/scripts/window-changer/sway_alt_tab daemon"
 exec_always swaync
 
 ## Dynamic Window Tiling
-exec_always "~/.config/sway/scripts/autotiling"
+exec_always ~/.local/bin/autotiling
 
 ## Start Kanata
 exec_always "~/.config/kanata-tray/kanata-tray-linux.sh"
@@ -523,4 +526,3 @@ client.urgent           #ff0000 #ff0000 #ff0000 #ffffff
 # and nm-applet is the most common system tray GUI for it.
 # For sway, you might want to use sway's waybar or use NetworkManager's applet directly
 #######################################################################################
-
