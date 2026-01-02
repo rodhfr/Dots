@@ -11,6 +11,10 @@ vim.keymap.set("n", "gp", "iprint()<Esc>i", { noremap = true, silent = true })
 vim.keymap.set("n", "go", 'iprint("\\n: ")<Esc>3hi', { noremap = true, silent = true })
 -- Wrap visual selection in print() with "gu"
 vim.keymap.set("v", "gu", [[:s/\%V.*/print(&)/<CR>]], { noremap = true, silent = true })
+-- Saves and exit
+vim.keymap.set("n", "<leader>w", "<cmd>wq<CR>", { noremap = true, silent = true, desc = "Save and quit" })
+-- force exit
+vim.keymap.set("n", "<leader>q", "<cmd>q!<CR>", { noremap = true, silent = true, desc = "Quit without saving" })
 
 local term_win = nil
 local term_buf = nil
@@ -52,4 +56,4 @@ vim.keymap.set("n", "<leader>r", function()
     stdout_buffered = false,
     stderr_buffered = false,
   })
-end, { noremap = true, silent = true })
+end, { noremap = true, silent = true, desc = "Run Python file" })
