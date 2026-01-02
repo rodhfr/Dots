@@ -1,7 +1,7 @@
 a = C-pageup
 d = C-pagedown
-w = k
-s = j
+w = u
+s = d
 1 = home
 2 = end
 q = macro(home 50ms S-end)

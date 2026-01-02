@@ -75,11 +75,17 @@ exec_always "~/.config/sway/scripts/window-changer/sway_alt_tab daemon"
 ## Notification Daemon
 exec_always swaync
 
+## Wayvnc start
+exec_always wayvnc
+
 ## Dynamic Window Tiling
 exec_always ~/.local/bin/autotiling
 
+## Start app remapping keyd
+exec keyd-application-mapper -d
+
 ## Start Kanata
-exec_always "~/.config/kanata-tray/kanata-tray-linux.sh"
+#exec_always "~/.config/kanata-tray/kanata-tray-linux.sh"
 
 ## Clipboard Manager
 exec wl-paste --watch cliphist store
