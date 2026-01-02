@@ -1,11 +1,9 @@
 a = C-pageup
 d = C-pagedown
-w = up
-s = down
+w = k
+s = j
 1 = home
 2 = end
-3 = A-left
-4 = A-right
 q = macro(home 50ms S-end)
 e = macro(home 50ms S-end delete)
 o = macro(end 50ms enter)
