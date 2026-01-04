@@ -1,0 +1,4 @@
+{
+  "keyMappings": "map <Down> scrollDown\nmap <Up> scrollUp\nunmap r\nunmap m\nmap t Vomnibar.activateEditUrlInNewTab\nmap o Vomnibar.activateInNewTab\nmap h Vomnibar.activateInNewTab\nmap @ closeTabsOnLeft\nmap # closeTabsOnRight",
+  "settingsVersion": "2.3.1"
+}
