@@ -76,7 +76,7 @@ exec_always "~/.config/sway/scripts/window-changer/sway_alt_tab daemon"
 exec_always swaync
 
 ## Wayvnc start
-exec_always wayvnc
+exec_always wayvnc -g
 
 ## Dynamic Window Tiling
 exec_always ~/.local/bin/autotiling
