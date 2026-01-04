@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-python ./dotsup/dotsup.py
+cd ./dotsup/
+python dotsup.py
