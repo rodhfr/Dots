@@ -46,7 +46,8 @@ function ytflc
 
     echo
     echo "Download complete. Press Enter to exit..."
-    notify-send "YouTube FLAC Download" "Download completed in $DEST"
+    notify-send "YouTube FLAC Download" "✅Download completed in $DEST"
     echo
+    exit
     #read
 end
