@@ -1,0 +1,48 @@
+(defcfg
+  process-unmapped-keys yes
+  log-layer-changes yes
+  linux-dev /dev/input/event26
+)
+
+(defsrc 
+  bspc      kp-    kp+    kprt
+  kp*       kp9    kp6    kp3     kp.
+  kp/       kp8    kp5    kp2
+  NumLock   kp7    kp4    kp1     kp0
+)
+
+(defalias
+  enter-triple-tap (tap-dance 50 (enter XX Quote))
+  p-tap-hold (tap-hold 50 150 p M-p)
+)
+
+
+(deflayer default
+    /     _       _            bspc  
+    y     u       i            o       @p-tap-hold
+    h     j       k            l 
+    n     m       .            ,       @enter-triple-tap
+)
+
+
+;;(deflayer l-act
+;;    _               _      _    _      bspc
+;;                    _      _    _      _ 
+;;    _               _      _    _      _
+;;    _               _      _    _ 
+;;)
+;;
+;;(defalias
+;;   l-act (tap-hold-press 200 200 l (layer-while-held l-act)
+;;   )
+;;)
+;;
+
+;;(deflayer layername
+;;   _  _  _  _
+;;)
+;;(defalias
+;; cap (tap-hold-press 200 200 esc (layer-while-held layername) 
+;;     ) 
+;;)
+
