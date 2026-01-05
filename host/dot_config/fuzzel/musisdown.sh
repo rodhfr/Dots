@@ -1,27 +1,28 @@
-##!/bin/bash
-#
-#URL=$(fuzzel -D yes -d --placeholder="YouTube Flac Downloader")
-#echo "$URL"
-#yt-dlp -P ~/Music -x --audio-format flac "$URL"
+#!/usr/bin/env bash
 
-#!/bin/bash
+# Ensure proper PATH for Sway hotkeys / Wayland
+export PATH=/usr/local/bin:/usr/bin:/bin:/home/rodhfr/.local/bin
+export XDG_RUNTIME_DIR=/run/user/$(id -u)
 
-input=$(fuzzel --width 60 -D yes -d --placeholder="Folder in ~/Music and URL, e.g.: jazz https://youtu.be/...")
-[ -z "$input" ] && exit 0
+# Prompt for URL
+URL=$(/usr/bin/fuzzel -D yes -d --placeholder="YouTube Flac Downloader")
 
-# primeiro campo = path
-dest=$(printf '%s\n' "$input" | awk '{print $1}')
-
-# resto da linha = URL
-url=$(printf '%s\n' "$input" | cut -d' ' -f2-)
-
-# expande ~ corretamente
-dest=$(eval echo "$dest")
-
-# valida URL
-if ! printf '%s\n' "$url" | grep -qE '^https?://'; then
-  notify-send "URL inválida" "$url"
-  exit 1
+# Exit if empty
+if [[ -z "$URL" ]]; then
+  /usr/bin/notify-send "Error" "No URL provided"
+  exit
 fi
 
-yt-dlp -P "~/Music/$dest" -x --audio-format flac "$url"
+# Destination folder
+DEST=~/Music
+mkdir -p "$DEST"
+
+# Terminal emulator to use (change to your preferred terminal)
+TERMINAL="alacritty" # or "alacritty" / "kitty" / "gnome-terminal"
+
+# Build yt-dlp command string
+CMD="yt-dlp -P \"$DEST\" -x --audio-format flac \"$URL\"; echo; read -n1 -s -r -p 'Press any key to exit...'"
+
+# Spawn terminal with yt-dlp
+$TERMINAL -e sh -c "$CMD" &
+/usr/bin/notify-send "Download concluído" "$URL"
