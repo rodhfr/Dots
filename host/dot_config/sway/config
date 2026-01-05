@@ -424,8 +424,11 @@ mode Mouse {
 bindsym f8 exec "wlrctl pointer scroll 30"
 bindsym f9 exec "wlrctl pointer scroll -30"
 
+## music downloader
+bindsym $mod+m exec ~/.config/fuzzel/musisdown.sh
+
 ## wl-miror hotkey
-bindsym $mod+m workspace 8 ; workspace 9
+#bindsym $mod+m workspace 8 ; workspace 9
 #bindsym $mod+m workspace $ws8 ; exec wl-mirror -s e eDP-1 ; workspace $ws9 
 
 ## Alt Tab but $mod+Tab for workspaces
