@@ -15,8 +15,10 @@ c = C-S-c
 v = C-S-v
 - = volumedown
 = = volumeup
-0 = S-0
-9 = S-9
+#0 = S-0
+#9 = S-9
+0 = brightnessup
+9 = brightnessdown
 7 = macro(127.0.0.1)
 b = C-A-f
 z = C-A-f

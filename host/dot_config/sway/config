@@ -186,8 +186,8 @@ bindsym $mod+minus exec playerctl previous
 ## Brightness Control
 bindsym XF86MonBrightnessUp exec brightnessctl set 10%+
 bindsym XF86MonBrightnessDown exec brightnessctl set 10%-
-bindsym $mod+Shift+i exec brightnessctl set 10%+
-bindsym $mod+Shift+j exec brightnessctl set 10%-
+# bindsym $mod+Shift+i exec brightnessctl set 10%+
+# bindsym $mod+Shift+j exec brightnessctl set 10%-
 
 ## Extra Dimmer Control
 #bindsym $mod+g exec brightnessctl set 1 && pkill dim
@@ -227,16 +227,22 @@ bindsym $mod+Shift+m output "eDP-1" enable ; output "HDMI-A-1" enable ; output "
 bindsym $mod+q kill
 
 ## Focus Window by Direction
+# Arrow keyd
 bindsym $mod+a focus left
 bindsym $mod+w focus up 
 bindsym $mod+d focus right 
 bindsym $mod+s focus down
+# Vim motions
+bindsym $mod+h focus left
+bindsym $mod+k focus up 
+bindsym $mod+l focus right 
+bindsym $mod+j focus down
 
 ## Toggle Fullscreen Current Window
 bindsym $mod+Shift+f fullscreen toggle
 
 ## Toggle Between Floating and Tilling
-bindsym $mod+k floating toggle, sticky disable
+bindsym $mod+Ctrl+f floating toggle, sticky disable
 
 ## Picture in Picture
 #bindsym $mod+Ctrl+p sticky enable, floating enable, resize set width 400px height 225px, move position 1500 10
@@ -346,10 +352,17 @@ bindsym $mod+Shift+up mark swap, focus down, swap container with mark swap, exec
 bindsym $mod+Shift+right mark swap, focus right, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab"
 
 ## Move Focused Window wsad while mantaining focus
+# Arrow keys
 bindsym $mod+Shift+a mark swap, focus left, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab" 
 bindsym $mod+Shift+s mark swap, focus up, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab"
 bindsym $mod+Shift+w mark swap, focus down, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab"
 bindsym $mod+Shift+d mark swap, focus right, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab"
+
+# Vim motions
+bindsym $mod+Shift+h mark swap, focus left, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab" 
+bindsym $mod+Shift+k mark swap, focus up, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab"
+bindsym $mod+Shift+j mark swap, focus down, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab"
+bindsym $mod+Shift+l mark swap, focus right, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab"
 
 ## invert layout
 bindsym $mod+Ctrl+a move left, move left, move left
@@ -478,7 +491,8 @@ bindsym $mod+Ctrl+p exec notify-send -t 4000 "🎨 Select Hex Colour" && grim -g
 bindsym $mod+Shift+y exec $tty -e nvim -n ~/.config/sway/config
 
 ## System Resources
-bindsym $mod+h exec $tty -e $systemresources 
+bindsym $mod+t exec $tty -e $systemresources 
+
 
 ## Disabled:
 # Quick Notes
