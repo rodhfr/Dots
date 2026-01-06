@@ -13,16 +13,28 @@
 
 (defalias
   enter-triple-tap (tap-dance 50 (enter XX Quote))
-  p-tap-hold (tap-hold 50 150 p M-p)
+  p-tap-hold (tap-hold 200 200 p lmet)
+  o-tap-hold (tap-hold 200 200 o lshift)
+  i-tap-hold (tap-hold 200 200 i lctrl)
+  u-tap-hold (tap-hold 200 200 u lalt)
 )
 
 
 (deflayer default
-    /     _       _            bspc  
-    y     u       i            o       @p-tap-hold
-    h     j       k            l 
-    n     m       .            ,       @enter-triple-tap
+    /       _              _                bspc  
+    y       @u-tap-hold    @i-tap-hold      @o-tap-hold               @p-tap-hold
+    h       j              k                l 
+    n       m              .                ,                         @enter-triple-tap
 )
+
+(deflayer meta
+    _       _              _                _          
+    _       _              _                _                lmeta
+    _       _              _                _ 
+    _       _              _                _                _
+)
+
+
 
 
 ;;(deflayer l-act

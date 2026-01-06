@@ -12,7 +12,7 @@ set $mod mod4
 set $tty alacritty
 set $alttty foot
 set $alttty2 kitty
-set $browser firefox
+set $browser flatpak run com.google.Chrome
 set $audiogui pavucontrol
 set $systemresources htop
 set $texteditor nvim
@@ -395,15 +395,26 @@ mode "resize" {
 ## Keyboard-Mouse Control
 bindsym $mod+z exec "wl-kbptr -o modes=tile,split,click"
 bindsym $mod+Shift+z mode Mouse
+bindsym $mod+c mode Mouse
 mode Mouse {
     bindsym a mode default, exec 'wl-kbptr-sway-active-win; swaymsg mode Mouse'
     bindsym Shift+a mode default, exec 'wl-kbptr; swaymsg mode Mouse'
 
     # Mouse move
-    bindsym h seat seat0 cursor move -15 0
-    bindsym j seat seat0 cursor move 0 15
-    bindsym k seat seat0 cursor move 0 -15
-    bindsym l seat seat0 cursor move 15 0
+    bindsym Ctrl+h seat seat0 cursor move -30 0
+    bindsym Ctrl+j seat seat0 cursor move 0 30
+    bindsym Ctrl+k seat seat0 cursor move 0 -30
+    bindsym Ctrl+l seat seat0 cursor move 30 0
+    
+    bindsym h seat seat0 cursor move -60 0
+    bindsym j seat seat0 cursor move 0 60
+    bindsym k seat seat0 cursor move 0 -60
+    bindsym l seat seat0 cursor move 60 0
+
+    bindsym Shift+h seat seat0 cursor move -400 0
+    bindsym Shift+j seat seat0 cursor move 0 400 
+    bindsym Shift+k seat seat0 cursor move 0 -400
+    bindsym Shift+l seat seat0 cursor move 400 0
 
     bindsym 1 seat seat0 cursor press button1
     bindsym --release 2 seat seat0 cursor release button1
@@ -457,8 +468,9 @@ bindsym $mod+i exec ~/.config/sway/scripts/window-changer/sway_alt_tab
 ########################################################################################
 ################################# Launcher Hotkeys #####################################
 ## Menu Launcher
-bindsym $mod+c exec --no-startup-id fuzzel 
+#bindsym $mod+c exec --no-startup-id fuzzel 
 bindsym $mod+x exec --no-startup-id fuzzel
+bindsym $mod+g exec --no-startup-id fuzzel
 ## Clipboard Manager
 bindsym $mod+u exec rofi -modi clipboard:~/.config/sway/clipboard/cliphist-rofi-img -show clipboard -show-icons -theme rounded-gray-dark
 ## Send Clipboard to Pushbullet Using their API.
