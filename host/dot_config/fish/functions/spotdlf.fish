@@ -22,5 +22,6 @@ function spotdlf
         mkdir -p "$DEST"
     end
 
-    spotdl --output "$DEST" "$URL"
+    spotdl --output "$DEST" "$URL" --lyrics synced genius musixmatch azlyrics --generate-lrc
+    notify-send -t 2000 -i audio-x-generic Spotdlf "Task completed."
 end
