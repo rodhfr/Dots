@@ -393,14 +393,14 @@ bindsym $mod+z exec "wl-kbptr -o modes=tile,split,click"
 bindsym $mod+Shift+z mode Mouse
 bindsym $mod+c mode Mouse
 mode Mouse {
-    bindsym a mode default, exec 'wl-kbptr-sway-active-win; swaymsg mode Mouse'
+    #bindsym a mode default, exec 'wl-kbptr-sway-active-win; swaymsg mode Mouse'
     bindsym Shift+a mode default, exec 'wl-kbptr; swaymsg mode Mouse'
 
     # Mouse move
-    bindsym Ctrl+h seat seat0 cursor move -30 0
-    bindsym Ctrl+j seat seat0 cursor move 0 30
-    bindsym Ctrl+k seat seat0 cursor move 0 -30
-    bindsym Ctrl+l seat seat0 cursor move 30 0
+    bindsym Ctrl+h seat seat0 cursor move -15 0
+    bindsym Ctrl+j seat seat0 cursor move 0 15
+    bindsym Ctrl+k seat seat0 cursor move 0 -15
+    bindsym Ctrl+l seat seat0 cursor move 15 0
     
     bindsym h seat seat0 cursor move -60 0
     bindsym j seat seat0 cursor move 0 60
@@ -415,16 +415,16 @@ mode Mouse {
     bindsym 1 seat seat0 cursor press button1
     bindsym --release 2 seat seat0 cursor release button1
 
-    bindsym s seat seat0 cursor press button1
-    bindsym --release s seat seat0 cursor release button1
+    bindsym a seat seat0 cursor press button1
+    bindsym --release a seat seat0 cursor release button1
 
     # Middle button
-    bindsym d seat seat0 cursor press button2
-    bindsym --release d seat seat0 cursor release button2
+    bindsym s seat seat0 cursor press button2
+    bindsym --release s seat seat0 cursor release button2
 
     # Right button
-    bindsym f seat seat0 cursor press button3
-    bindsym --release f seat seat0 cursor release button3
+    bindsym d seat seat0 cursor press button3
+    bindsym --release d seat seat0 cursor release button3
 
     bindsym Escape mode default
 }
