@@ -8,7 +8,6 @@ set $mod mod4
 # mod1 = alt
 # Other keys are possible.
 
-
 set $tty alacritty
 set $alttty foot
 set $alttty2 kitty
@@ -46,7 +45,6 @@ font pango:monospace 12
 ## Start nm-applet tray icon (only if using NetworkManager)
 exec --no-startup-id nm-applet
 
-
 ### MAKE XDG WORK:
 #export XDG_CURRENT_DESKTOP=sway 
 #export XDG_SESSION_DESKTOP=sway
@@ -61,16 +59,12 @@ exec gsettings set org.gnome.desktop.interface color-scheme prefer-dark
 
 ## Start polkit for authentication
 exec /usr/bin/lxpolkit
+
+# Make Android USB connections work and other types of mounts
 exec /usr/libexec/gvfsd &
 exec /usr/libexec/gvfsd-fuse /run/user/$(id -u)/gvfs -f &
 exec /usr/libexec/gvfs-udisks2-volume-monitor &
 exec /usr/libexec/gvfs-mtp-volume-monitor &
-
-## Auto Reload Sway Config
-exec sh ~/.config/sway/scripts/auto-reload-sway &
-
-## Alt Tab Daemon
-exec_always "~/.config/sway/scripts/window-changer/sway_alt_tab daemon"
 
 ## Notification Daemon
 exec_always swaync
@@ -88,8 +82,10 @@ exec keyd-application-mapper -d
 #exec_always "~/.config/kanata-tray/kanata-tray-linux.sh"
 
 ## Clipboard Manager
-exec wl-paste --watch cliphist store
+## Decrecate cliphist Clipboard Manager for clipse
+#exec wl-paste --watch cliphist store
 #exec wl-paste --type image --watch cliphist store
+exec ~/go/bin/clipse -listen
 
 ## Bluetooth Autoconnect
 exec ~/.config/sway/bluetooth/connect/bls-b21
@@ -129,6 +125,8 @@ set $wallpapers_path ~/.config/Wallpapers
 ## Floating Rule
 for_window [app_id="floatingterm"] floating enable, border normal, resize set width 58ppt height 70ppt, move position center, border none
 for_window [title="Picture-in-Picture"]  floating enable, border pixel 1
+for_window [app_id="clipse"] floating enable, move position center, resize set 80ppt 80ppt 
+
 
 ## Window to Specific Workspace
 for_window [class="BoltLauncher"] move --no-auto-back-and-forth container to workspace 9 
@@ -162,8 +160,6 @@ input "*" {
 
 ########################################################################################
 ################################# System Controls #######################################
-bindsym f12 exec mpv --fullscreen --player-operation-mode=pseudo-gui -- %U
-bindsym f11 exec pkill mpv
 
 ## Reload/Restart Sway
 bindsym $mod+Shift+c reload
@@ -190,17 +186,17 @@ bindsym XF86MonBrightnessDown exec brightnessctl set 10%-
 # bindsym $mod+Shift+j exec brightnessctl set 10%-
 
 ## Extra Dimmer Control
-#bindsym $mod+g exec brightnessctl set 1 && pkill dim
-#bindsym $mod+Shift+g exec dim -d 0 -p -a 0.025
-#bindsym $mod+Ctrl+g exec dim -d 0 -p -a -0.025
+# bindsym $mod+g exec brightnessctl set 1 && pkill dim
+# bindsym $mod+Shift+g exec dim -d 0 -p -a 0.025
+# bindsym $mod+Ctrl+g exec dim -d 0 -p -a -0.025
 
 ## Media Control
-bindsym F10 exec playerctl play-pause && notify-send -t 1000 "⏯️ Play/Pause"
-#bindsym F13 exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+ 
-#bindsym F12 exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05- 
-#bindsym F11 exec pactl set-sink-mute @DEFAULT_SINK@ toggle && notify-send -t 1000 "🔇/📢 Mute toggled"
-#bindsym Shift+0 exec playerctl next
-#bindsym Shift+9 exec playerctl previous
+# bindsym F10 exec playerctl play-pause && notify-send -t 1000 "⏯️ Play/Pause"
+# bindsym F13 exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+ 
+# bindsym F12 exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05- 
+# bindsym F11 exec pactl set-sink-mute @DEFAULT_SINK@ toggle && notify-send -t 1000 "🔇/📢 Mute toggled"
+# bindsym Shift+0 exec playerctl next
+# bindsym Shift+9 exec playerctl previous
 
 ## Bluetooth Connect
 # bindsym $mod+Shift+b exec ~/.config/sway/bluetooth/connect/qcyt13anc
@@ -432,15 +428,11 @@ mode Mouse {
 
     bindsym Escape mode default
 }
-bindsym f8 exec "wlrctl pointer scroll 30"
-bindsym f9 exec "wlrctl pointer scroll -30"
+#bindsym f8 exec "wlrctl pointer scroll 30"
+#bindsym f9 exec "wlrctl pointer scroll -30"
 
-## music downloader
+## Music Downloader
 bindsym $mod+m exec ~/.config/fuzzel/musisdown.sh
-
-## wl-miror hotkey
-#bindsym $mod+m workspace 8 ; workspace 9
-#bindsym $mod+m workspace $ws8 ; exec wl-mirror -s e eDP-1 ; workspace $ws9 
 
 ## Alt Tab but $mod+Tab for workspaces
 bindsym $mod+Tab workspace back_and_forth
@@ -461,6 +453,10 @@ bindsym $mod+i exec ~/.config/sway/scripts/window-changer/sway_alt_tab
     #bindsym $mod+minus scratchpad show
 # bindsym $mod+Shift+minus move scratchpad
 # bindsym $mod+minus scratchpad show
+
+# wl-miror hotkey
+#bindsym $mod+m workspace 8 ; workspace 9
+#bindsym $mod+m workspace $ws8 ; exec wl-mirror -s e eDP-1 ; workspace $ws9 
 ########################################################################################
 ########################################################################################
 
@@ -471,8 +467,13 @@ bindsym $mod+i exec ~/.config/sway/scripts/window-changer/sway_alt_tab
 #bindsym $mod+c exec --no-startup-id fuzzel 
 bindsym $mod+x exec --no-startup-id fuzzel
 bindsym $mod+g exec --no-startup-id fuzzel
+
 ## Clipboard Manager
-bindsym $mod+u exec rofi -modi clipboard:~/.config/sway/clipboard/cliphist-rofi-img -show clipboard -show-icons -theme rounded-gray-dark
+bindsym $mod+u exec $tty --class clipse -e ~/go/bin/clipse
+
+## Decrecate cliphist for clipse
+# bindsym $mod+u exec rofi -modi clipboard:~/.config/sway/clipboard/cliphist-rofi-img -show clipboard -show-icons -theme rounded-gray-dark
+
 ## Send Clipboard to Pushbullet Using their API.
 bindsym mod1+p exec bash -c "~/.config/sway/clipboard/pushbullet/sendclipboard"
 
@@ -518,9 +519,11 @@ bindsym $mod+t exec $tty -e $systemresources
 
 ## Mpv Open Clipboard Link
 # bindsym $mod+m exec ~/.config/sway/scripts/paste_mpv
-########################################################################################
-########################################################################################
+# bindsym f12 exec mpv --fullscreen --player-operation-mode=pseudo-gui -- %U
+# bindsym f11 exec pkill mpv
 
+########################################################################################
+########################################################################################
 
 
 ################################# Sway Window Decorators ###############################
@@ -560,4 +563,10 @@ client.urgent           #ff0000 #ff0000 #ff0000 #ffffff
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is the most common system tray GUI for it.
 # For sway, you might want to use sway's waybar or use NetworkManager's applet directly
+
+## Auto Reload Sway Config
+#exec sh ~/.config/sway/scripts/auto-reload-sway &
+
+## Alt Tab Daemon
+#exec_always "~/.config/sway/scripts/window-changer/sway_alt_tab daemon"
 #######################################################################################
