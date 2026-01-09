@@ -89,6 +89,9 @@ exec ~/go/bin/clipse -listen
 
 ## Bluetooth Autoconnect
 exec ~/.config/sway/bluetooth/connect/bls-b21
+
+## Autostart
+exec $tty & sleep 1 && swaymsg workspace 2 && exec $browser
 ########################################################################################
 ########################################################################################
 
