@@ -5,7 +5,6 @@ import sys
 import shutil
 import os
 from pathlib import Path
-import argparse
 
 # ── Minimal config parser ─────────────────────────────────────
 
@@ -70,12 +69,6 @@ def copy_dir(src: Path, dst: Path) -> None:
             shutil.copy2(item, target)
 
 
-# ── Argument parsing ─────────────────────────────────────────
-
-parser = argparse.ArgumentParser(description="Sync dotfiles and commit changes.")
-parser.add_argument("-c", "--commit", type=str, help="Custom commit message")
-args = parser.parse_args()
-
 # ── Main ─────────────────────────────────────────────────────
 
 config_path = Path("dotsup.conf")
@@ -93,14 +86,10 @@ try:
     dots_repo = Path(cfg["repo_path"])
     source_root = Path(cfg["source_root"])
     configs = cfg["configs"]
-    commit_msg = cfg.get("commit_message", "Update dotfiles")
+    commit_msg = cfg["commit_message"]
 except KeyError as e:
     echo(f"Missing config key: {e}")
     sys.exit(1)
-
-# Override commit message if -c flag is used
-if args.commit:
-    commit_msg = args.commit
 
 dest_root = dots_repo
 
@@ -122,7 +111,7 @@ if diff.returncode == 0:
     echo("No changes detected. Nothing to commit or push.")
     sys.exit(0)
 
-echo(f"Committing changes with message: '{commit_msg}'")
+echo("Committing changes...")
 subprocess.run(["git", "commit", "-m", commit_msg], check=True)
 
 echo("Pushing to remote repository...")
