@@ -1,0 +1,10 @@
+[keyboard]
+bindings = [
+  { key = 'PageUp',  action = 'ScrollLineUp' },
+  { key = 'PageDown', action = 'ScrollLineDown' },
+  { key = 'PageUp', mods = "Shift", action = 'ScrollHalfPageUp' },
+  { key = 'PageDown', mods = "Shift", action = 'ScrollHalfPageDown' },
+  { key = 'PageUp', mods = "Control", action = 'ScrollToTop' },
+  { key = 'PageDown', mods = "Control", action = 'ScrollToBottom' },
+  { key = "Return", mods = "Control", action = "CreateNewWindow" }
+]
