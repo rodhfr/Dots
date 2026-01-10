@@ -1,5 +1,3 @@
-## yt-dlp config 
-
 --cookies-from-browser firefox
 # Video quality
 #-f bestvideo[height<=720]+bestaudio/best
