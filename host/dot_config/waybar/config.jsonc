@@ -12,7 +12,8 @@
         "sway/scratchpad"
     ],
     "modules-center": [
-        "sway/window"
+        "sway/window",
+        "custom/runebar"
     ],
     "modules-right": [
         "idle_inhibitor",
@@ -210,5 +211,13 @@
 			"suspend": "systemctl suspend",
 			"hibernate": "systemctl hibernate"
 		}
+    },
+    "custom/runebar": {
+        "format": "{text}",
+        "exec": "python /home/rodhfr/.config/waybar/runebar.py",
+        "interval": 0,
+        "signal": 10,
+        "on-click": "killall -SIGUSR1 waybar", 
+        "return-type": "json"
     }
 }

@@ -241,3 +241,24 @@ button:hover {
     }
 }
 
+#custom-runebar.green {
+    background-color: #00ff00; /* verde */
+    color: #000000; /* texto preto */
+    /* padding: 0 16px; */
+    padding-left: 16px;   /* aumenta espaço à esquerda */
+    padding-right: 16px;   /* aumenta espaço à esquerda */
+    border-radius: 3px;
+    transition: background-color 0.5s ease; /* transição suave */
+}
+
+#custom-runebar.red {
+    background-color: #ff0000; /* vermelho */
+    font-weight: bold; /* deixa o texto em negrito */
+    color: #ffffff; /* texto branco */
+    /* padding: 0 16px; */
+    padding-left: 16px;   /* aumenta espaço à esquerda */
+    padding-right: 16px;   /* aumenta espaço à esquerda */
+    border-radius: 3px;
+    transition: background-color 0.5s ease; /* transição suave */
+}
+
