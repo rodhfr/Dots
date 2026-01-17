@@ -5,12 +5,65 @@ require("config.lazy")
 vim.keymap.set("n", "<C-c>", ":%y+<CR>", { noremap = true, silent = true })
 -- select everything with ctrl a
 vim.keymap.set("n", "<C-a>", "gg:sleep 100m<CR>vG$", { noremap = true, silent = true })
--- simple print()
-vim.keymap.set("n", "gp", "oprint()<Esc>i", { noremap = true, silent = true })
--- print("\n :")
-vim.keymap.set("n", "go", 'oprint("\\n: ")<Esc>3hi', { noremap = true, silent = true })
--- Wrap visual selection in print() with "gu"
-vim.keymap.set("v", "gu", [[:s/\%V.*/print(&)/<CR>]], { noremap = true, silent = true })
+
+-- Visual mode: wrap selection in print() on next line with "fp"
+vim.keymap.set("v", "fp", function()
+  -- pega posições da seleção visual
+  local start_pos = vim.fn.getpos("v") -- início da seleção
+  local end_pos = vim.fn.getpos(".") -- cursor atual (fim da seleção)
+
+  local start_line, start_col = start_pos[2], start_pos[3]
+  local end_line, end_col = end_pos[2], end_pos[3]
+
+  -- pega as linhas do buffer entre início e fim
+  local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
+
+  -- ajusta colunas na primeira e última linha
+  if #lines == 1 then
+    lines[1] = lines[1]:sub(start_col, end_col)
+  else
+    lines[1] = lines[1]:sub(start_col)
+    lines[#lines] = lines[#lines]:sub(1, end_col)
+  end
+
+  -- junta todas as linhas em uma só
+  local text = table.concat(lines, " ")
+
+  -- insere a linha print(...) abaixo da seleção
+  vim.api.nvim_put({ "print(" .. text .. ")" }, "l", true, true)
+
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "m", true)
+end, { noremap = true, silent = true })
+
+-- Visual mode: wrap selection in print() on next line with "fp"
+vim.keymap.set("v", "ft", function()
+  -- pega posições da seleção visual
+  local start_pos = vim.fn.getpos("v") -- início da seleção
+  local end_pos = vim.fn.getpos(".") -- cursor atual (fim da seleção)
+
+  local start_line, start_col = start_pos[2], start_pos[3]
+  local end_line, end_col = end_pos[2], end_pos[3]
+
+  -- pega as linhas do buffer entre início e fim
+  local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
+
+  -- ajusta colunas na primeira e última linha
+  if #lines == 1 then
+    lines[1] = lines[1]:sub(start_col, end_col)
+  else
+    lines[1] = lines[1]:sub(start_col)
+    lines[#lines] = lines[#lines]:sub(1, end_col)
+  end
+
+  -- junta todas as linhas em uma só
+  local text = table.concat(lines, " ")
+
+  -- insere a linha print(...) abaixo da seleção
+  vim.api.nvim_put({ 'print("\\n' .. text .. ': " )' }, "l", true, true)
+
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "m", true)
+end, { noremap = true, silent = true })
+
 -- Saves and exit
 vim.keymap.set("n", "<leader>w", "<cmd>wq<CR>", { noremap = true, silent = true, desc = "Save and quit" })
 -- force exit
@@ -57,3 +110,7 @@ vim.keymap.set("n", "<leader>r", function()
     stderr_buffered = false,
   })
 end, { noremap = true, silent = true, desc = "Run Python file" })
+
+-- vim.opt.spell = true
+vim.opt.spelllang = "pt_br,en_us"
+

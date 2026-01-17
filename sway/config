@@ -8,17 +8,18 @@ set $mod mod4
 # mod1 = alt
 # Other keys are possible.
 
-
 set $tty alacritty
 set $alttty foot
 set $alttty2 kitty
-set $browser firefox
+set $browser flatpak run com.google.Chrome
 set $audiogui pavucontrol
 set $systemresources htop
 set $texteditor nvim
 
 ## Set outputs for individual workspaces
 set $out-main eDP-1
+
+set $edit-sway-config $tty -e nvim -n ~/.config/sway/config
 #set $out-external HDMI-A-1
 
 ## Set initial workspace
@@ -46,67 +47,80 @@ font pango:monospace 12
 ## Start nm-applet tray icon (only if using NetworkManager)
 exec --no-startup-id nm-applet
 
-
-### MAKE XDG WORK:
-#export XDG_CURRENT_DESKTOP=sway 
+### MAKE XDG WORK IF NOT LAUNCHING VIA GDM OR SDDM:
 #export XDG_SESSION_DESKTOP=sway
 #export XDG_SESSION_TYPE=wayland
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec dex-autostart --autostart --environment sway
 
 ## Set Dark Gnome Theme for Libadwaita Apps
-exec gsettings set org.gnome.desktop.interface color-scheme prefer-dark
+#exec gsettings set org.gnome.desktop.interface color-scheme prefer-dark
 
 ## Start polkit for authentication
 exec /usr/bin/lxpolkit
-exec /usr/libexec/gvfsd &
-exec /usr/libexec/gvfsd-fuse /run/user/$(id -u)/gvfs -f &
-exec /usr/libexec/gvfs-udisks2-volume-monitor &
-exec /usr/libexec/gvfs-mtp-volume-monitor &
 
-## Auto Reload Sway Config
-exec sh ~/.config/sway/scripts/auto-reload-sway &
-
-## Alt Tab Daemon
-exec_always "~/.config/sway/scripts/window-changer/sway_alt_tab daemon"
-
-## Notification Daemon
-exec_always swaync
-
-## Wayvnc start
-exec_always wayvnc -g
-
-## Dynamic Window Tiling
-exec_always ~/.local/bin/autotiling
+# Make Android USB connections work and other types of mounts
+#exec /usr/libexec/gvfsd &
+#exec /usr/libexec/gvfsd-fuse /run/user/$(id -u)/gvfs -f &
+#exec /usr/libexec/gvfs-udisks2-volume-monitor &
+#exec /usr/libexec/gvfs-mtp-volume-monitor &
 
 ## Start app remapping keyd
 exec keyd-application-mapper -d
 
+## Clipboard Manager
+exec_always sh -c 'pgrep -x wl-paste >/dev/null || /usr/bin/wl-paste --watch /home/rodhfr/go/bin/cliphist store'
+
+## Notification Daemon
+exec_always swaync
+
+## Start Tray Services
+exec_always python ~/.config/waybar/tray/audio_tray.py
+exec_always python ~/.config/waybar/tray/select_scale.py
+
+
+## Wayvnc start
+# exec_always wayvnc -g
+
+## Dynamic Window Tiling
+exec_always ~/.local/bin/autotiling
+
+## Restart portal
+exec_always systemctl --user restart xdg-desktop-portal.service
+
+
 ## Start Kanata
 #exec_always "~/.config/kanata-tray/kanata-tray-linux.sh"
 
-## Clipboard Manager
-exec wl-paste --watch cliphist store
-#exec wl-paste --type image --watch cliphist store
+
+# exec wl-paste --type image --watch cliphist store
 
 ## Bluetooth Autoconnect
-exec ~/.config/sway/bluetooth/connect/bls-b21
+#exec ~/.config/sway/bluetooth/connect/bls-b21
+
+## Autostart
+exec bash ~/.config/sway/startup.bash
+
+## Enable sunshine
+exec systemctl --user restart sunshine
+
 ########################################################################################
 ########################################################################################
 
 
 ########################################################################################
 ############################### Display Output #########################################
-## Notebook monitor to the left
-#output eDP-1 pos 0 0
-#output eDP-1 disable
-output HDMI-A-1 pos 1920 0 resolution 1920x1080@74.973Hz
+## Notebook monitor to the right
+#output eDP-1 pos 1920 0 scale 1.5
+output eDP-1 disable
+output HDMI-A-1 pos 0 0 resolution 1920x1080@74.973Hz 
 
 # Notebook Monitor to the Right (example)
 # output HDMI-A-1 pos 0 0 resolution 1920x1080@74.973Hz
-output eDP-1 pos 1920 0 disable
+#output eDP-1 pos 1920 0 disable
 
 ## Headless Output Config
 # output HEADLESS-1 resolution 1920x1080@60Hz position 3840 0
@@ -117,9 +131,9 @@ output eDP-1 pos 1920 0 disable
 ########################################################################################
 ############################### Wallpaper Config #######################################
 # Folder location
-set $wallpapers_path ~/.config/Wallpapers
-# Randomly select a wallpaper from the folder.
-#output * bg `find $wallpapers_path -type f | shuf -n 1` fill
+# Randomly select a wallpaper from the folder ~/Pictures/Wallpapers
+exec_always pkill swaybg && sleep 0.1 && swaybg -i "$(find ~/Pictures/Wallpapers/ -type f | shuf -n 1)" -m fill
+
 ########################################################################################
 ########################################################################################
 
@@ -128,10 +142,14 @@ set $wallpapers_path ~/.config/Wallpapers
 ############################### Window Rules ###########################################
 ## Floating Rule
 for_window [app_id="floatingterm"] floating enable, border normal, resize set width 58ppt height 70ppt, move position center, border none
-for_window [title="Picture-in-Picture"]  floating enable, border pixel 1
+for_window [title="Picture-in-Picture"]  floating enable, border pixel 1, sticky enable, resize set width 400px height 225px, move position 1500 10
+#for_window [title="Picture in picture"]  floating enable, border pixel 1, sticky enable, resize set width 400px height 225px, move position 1500 10
+for_window [title="Picture in picture"]  floating enable, border pixel 1, sticky enable, resize set width 268px height 164px, move position 1610 30
+
 
 ## Window to Specific Workspace
-for_window [class="BoltLauncher"] move --no-auto-back-and-forth container to workspace 9 
+for_window [class="com.adamcake.Bolt"] move --no-auto-back-and-forth container to workspace 1
+for_window [class="net-runelite-client-RuneLite"] move --no-auto-back-and-forth container to workspace 1
 
 ## Remote Management Windows
 for_window [app_id="de.feschber.LanMouse"] move --no-auto-back-and-forth container to workspace "remote", focus
@@ -162,8 +180,21 @@ input "*" {
 
 ########################################################################################
 ################################# System Controls #######################################
-bindsym f12 exec mpv --fullscreen --player-operation-mode=pseudo-gui -- %U
-bindsym f11 exec pkill mpv
+
+## Rofi Dmenu exec entries
+bindsym $mod+Shift+Ctrl+w exec fish ~/.local/bin/rswiki.fish
+bindsym $mod+Shift+Ctrl+y exec fish ~/.local/bin/ytmp3.fish
+bindsym $mod+Shift+Ctrl+n exec fish ~/.local/bin/nyaa.fish
+bindsym $mod+Shift+Ctrl+a exec fish ~/.local/bin/anilist.fish
+bindsym $mod+Shift+Ctrl+m exec fish ~/.local/bin/myanimelist.fish
+bindsym $mod+Shift+Ctrl+l exec fish ~/.local/bin/letterboxd.fish
+
+## KP_LAYER
+bindsym Alt+Shift+Ctrl+f exec $browser
+bindsym Alt+Shift+Ctrl+r exec flatpak run com.adamcake.Bolt
+bindsym Alt+Shift+Ctrl+s exec $edit-sway-config
+bindsym Alt+Shift+Ctrl+c exec xdg-open "https://chatgpt.com"
+bindsym Alt+Shift+Ctrl+m exec swaymsg output HDMI-A-1 toggle
 
 ## Reload/Restart Sway
 bindsym $mod+Shift+c reload
@@ -186,21 +217,21 @@ bindsym $mod+minus exec playerctl previous
 ## Brightness Control
 bindsym XF86MonBrightnessUp exec brightnessctl set 10%+
 bindsym XF86MonBrightnessDown exec brightnessctl set 10%-
-bindsym $mod+Shift+i exec brightnessctl set 10%+
-bindsym $mod+Shift+j exec brightnessctl set 10%-
+# bindsym $mod+Shift+i exec brightnessctl set 10%+
+# bindsym $mod+Shift+j exec brightnessctl set 10%-
 
 ## Extra Dimmer Control
-#bindsym $mod+g exec brightnessctl set 1 && pkill dim
-#bindsym $mod+Shift+g exec dim -d 0 -p -a 0.025
-#bindsym $mod+Ctrl+g exec dim -d 0 -p -a -0.025
+# bindsym $mod+g exec brightnessctl set 1 && pkill dim
+# bindsym $mod+Shift+g exec dim -d 0 -p -a 0.025
+# bindsym $mod+Ctrl+g exec dim -d 0 -p -a -0.025
 
 ## Media Control
-bindsym F10 exec playerctl play-pause && notify-send -t 1000 "⏯️ Play/Pause"
-#bindsym F13 exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+ 
-#bindsym F12 exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05- 
-#bindsym F11 exec pactl set-sink-mute @DEFAULT_SINK@ toggle && notify-send -t 1000 "🔇/📢 Mute toggled"
-#bindsym Shift+0 exec playerctl next
-#bindsym Shift+9 exec playerctl previous
+# bindsym F10 exec playerctl play-pause && notify-send -t 1000 "⏯️ Play/Pause"
+# bindsym F13 exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+ 
+# bindsym F12 exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05- 
+# bindsym F11 exec pactl set-sink-mute @DEFAULT_SINK@ toggle && notify-send -t 1000 "🔇/📢 Mute toggled"
+# bindsym Shift+0 exec playerctl next
+# bindsym Shift+9 exec playerctl previous
 
 ## Bluetooth Connect
 # bindsym $mod+Shift+b exec ~/.config/sway/bluetooth/connect/qcyt13anc
@@ -227,16 +258,22 @@ bindsym $mod+Shift+m output "eDP-1" enable ; output "HDMI-A-1" enable ; output "
 bindsym $mod+q kill
 
 ## Focus Window by Direction
+# Arrow keyd
 bindsym $mod+a focus left
 bindsym $mod+w focus up 
 bindsym $mod+d focus right 
 bindsym $mod+s focus down
+# Vim motions
+bindsym $mod+h focus left
+bindsym $mod+k focus up 
+bindsym $mod+l focus right 
+bindsym $mod+j focus down
 
 ## Toggle Fullscreen Current Window
 bindsym $mod+Shift+f fullscreen toggle
 
 ## Toggle Between Floating and Tilling
-bindsym $mod+k floating toggle, sticky disable
+bindsym $mod+Ctrl+f floating toggle
 
 ## Picture in Picture
 #bindsym $mod+Ctrl+p sticky enable, floating enable, resize set width 400px height 225px, move position 1500 10
@@ -333,23 +370,30 @@ bindsym $mod+Ctrl+2 move container to workspace 2
 bindsym $mod+Ctrl+3 move container to workspace 3
 bindsym $mod+Ctrl+4 move container to workspace 4
 bindsym $mod+Ctrl+5 move container to workspace 5
-bindsym $mod+Ctrl+6 move container to workspace 6
+bindsym $mod+Ctrl+6 move container to workspace 
 bindsym $mod+Ctrl+7 move container to workspace 7
 bindsym $mod+Ctrl+8 move container to workspace 8
 bindsym $mod+Ctrl+9 move container to workspace 9
 bindsym $mod+Ctrl+0 move container to workspace 0
 
-## Move Focused Window Arrow Keys while mantaining focus
+## Move Focused Window Arrow Keys while maintaining focus
 bindsym $mod+Shift+left mark swap, focus left, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab" 
 bindsym $mod+Shift+down mark swap, focus down, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab"
 bindsym $mod+Shift+up mark swap, focus down, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab"
 bindsym $mod+Shift+right mark swap, focus right, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab"
 
-## Move Focused Window wsad while mantaining focus
+## Move Focused Window wsad while maintaining focus
+# Arrow keys
 bindsym $mod+Shift+a mark swap, focus left, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab" 
 bindsym $mod+Shift+s mark swap, focus up, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab"
 bindsym $mod+Shift+w mark swap, focus down, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab"
 bindsym $mod+Shift+d mark swap, focus right, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab"
+
+# Vim motions
+bindsym $mod+Shift+h mark swap, focus left, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab" 
+bindsym $mod+Shift+k mark swap, focus up, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab"
+bindsym $mod+Shift+j mark swap, focus down, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab"
+bindsym $mod+Shift+l mark swap, focus right, swap container with mark swap, exec "~/.config/sway/scripts/window-changer/sway_alt_tab"
 
 ## invert layout
 bindsym $mod+Ctrl+a move left, move left, move left
@@ -382,38 +426,64 @@ mode "resize" {
 ## Keyboard-Mouse Control
 bindsym $mod+z exec "wl-kbptr -o modes=tile,split,click"
 bindsym $mod+Shift+z mode Mouse
+bindsym $mod+c mode Mouse
+
+bindsym Alt+h seat seat0 cursor move -60 0
+bindsym Alt+j seat seat0 cursor move 0 60 
+bindsym Alt+k seat seat0 cursor move 0 -60
+bindsym Alt+l seat seat0 cursor move 60 0 
+
+bindsym Alt+Shift+h seat seat0 cursor move -350 0
+bindsym Alt+Shift+j seat seat0 cursor move 0 350 
+bindsym Alt+Shift+k seat seat0 cursor move 0 -350
+bindsym Alt+Shift+l seat seat0 cursor move 350 0 
+
+bindsym Alt+Ctrl+h seat seat0 cursor move -15 0
+bindsym Alt+Ctrl+j seat seat0 cursor move 0 15 
+bindsym Alt+Ctrl+k seat seat0 cursor move 0 -15
+bindsym Alt+Ctrl+l seat seat0 cursor move 15 0 
+
 mode Mouse {
-    bindsym a mode default, exec 'wl-kbptr-sway-active-win; swaymsg mode Mouse'
+    #bindsym a mode default, exec 'wl-kbptr-sway-active-win; swaymsg mode Mouse'
     bindsym Shift+a mode default, exec 'wl-kbptr; swaymsg mode Mouse'
 
     # Mouse move
-    bindsym h seat seat0 cursor move -15 0
-    bindsym j seat seat0 cursor move 0 15
-    bindsym k seat seat0 cursor move 0 -15
-    bindsym l seat seat0 cursor move 15 0
+    bindsym Ctrl+h seat seat0 cursor move -15 0
+    bindsym Ctrl+j seat seat0 cursor move 0 15
+    bindsym Ctrl+k seat seat0 cursor move 0 -15
+    bindsym Ctrl+l seat seat0 cursor move 15 0
+    
+    bindsym h seat seat0 cursor move -60 0
+    bindsym j seat seat0 cursor move 0 60
+    bindsym k seat seat0 cursor move 0 -60
+    bindsym l seat seat0 cursor move 60 0
+
+    bindsym Shift+h seat seat0 cursor move -400 0
+    bindsym Shift+j seat seat0 cursor move 0 400 
+    bindsym Shift+k seat seat0 cursor move 0 -400
+    bindsym Shift+l seat seat0 cursor move 400 0
 
     bindsym 1 seat seat0 cursor press button1
     bindsym --release 2 seat seat0 cursor release button1
 
-    bindsym s seat seat0 cursor press button1
-    bindsym --release s seat seat0 cursor release button1
+    bindsym a seat seat0 cursor press button1
+    bindsym --release a seat seat0 cursor release button1
 
     # Middle button
-    bindsym d seat seat0 cursor press button2
-    bindsym --release d seat seat0 cursor release button2
+    bindsym s seat seat0 cursor press button2
+    bindsym --release s seat seat0 cursor release button2
 
     # Right button
-    bindsym f seat seat0 cursor press button3
-    bindsym --release f seat seat0 cursor release button3
+    bindsym d seat seat0 cursor press button3
+    bindsym --release d seat seat0 cursor release button3
 
     bindsym Escape mode default
 }
-bindsym f8 exec "wlrctl pointer scroll 30"
-bindsym f9 exec "wlrctl pointer scroll -30"
+#bindsym f8 exec "wlrctl pointer scroll 30"
+#bindsym f9 exec "wlrctl pointer scroll -30"
 
-## wl-miror hotkey
-bindsym $mod+m workspace 8 ; workspace 9
-#bindsym $mod+m workspace $ws8 ; exec wl-mirror -s e eDP-1 ; workspace $ws9 
+## Music Downloader
+#bindsym $mod+m exec ~/.config/fuzzel/musisdown.sh
 
 ## Alt Tab but $mod+Tab for workspaces
 bindsym $mod+Tab workspace back_and_forth
@@ -434,6 +504,10 @@ bindsym $mod+i exec ~/.config/sway/scripts/window-changer/sway_alt_tab
     #bindsym $mod+minus scratchpad show
 # bindsym $mod+Shift+minus move scratchpad
 # bindsym $mod+minus scratchpad show
+
+# wl-miror hotkey
+#bindsym $mod+m workspace 8 ; workspace 9
+#bindsym $mod+m workspace $ws8 ; exec wl-mirror -s e eDP-1 ; workspace $ws9 
 ########################################################################################
 ########################################################################################
 
@@ -441,12 +515,20 @@ bindsym $mod+i exec ~/.config/sway/scripts/window-changer/sway_alt_tab
 ########################################################################################
 ################################# Launcher Hotkeys #####################################
 ## Menu Launcher
-bindsym $mod+c exec --no-startup-id fuzzel 
 bindsym $mod+x exec --no-startup-id fuzzel
-## Clipboard Manager
-bindsym $mod+u exec rofi -modi clipboard:~/.config/sway/clipboard/cliphist-rofi-img -show clipboard -show-icons -theme rounded-gray-dark
+bindsym $mod+g exec --no-startup-id fuzzel
+# bindsym $mod+c exec --no-startup-id fuzzel 
+
+## Clipboard Manager hotkey
+### To use cliphist 
+# bindsym $mod+u exec rofi -modi clipboard:~/.config/rofi/cliphist-rofi-img -show clipboard -show-icons -theme rounded-gray-dark
+#bindsym $mod+u exec cliphist list | rofi -dmenu -show-icons -theme rounded-gray-dark | cliphist decode | wl-copy
+#bindsym $mod+u exec /home/rodhfr/.config/rofi/get_clipboard.sh
+
+bindsym $mod+u exec fish -c "cliphist list | rofi -dmenu -show-icons -theme rounded-gray-dark | cliphist decode | wl-copy"
+
 ## Send Clipboard to Pushbullet Using their API.
-bindsym mod1+p exec bash -c "~/.config/sway/clipboard/pushbullet/sendclipboard"
+#bindsym mod1+p exec bash -c "~/.config/sway/clipboard/pushbullet/sendclipboard"
 
 ## Terminal
 bindsym $mod+Return exec $tty 
@@ -471,14 +553,15 @@ bindsym $mod+b exec flatpak run io.github.ebonjaeger.bluejay
 
 ## Screenshot
 bindsym $mod+Shift+p exec sh -c 'IMGPATH="$HOME/Pictures/screenshot_$(date +%Y%m%d%H%M%S).png" && grim -g "$(slurp)" "$IMGPATH" && notify-send -t 4000 "📷 Saved to $IMGPATH" && kdeconnect-cli -d "$(kdeconnect-cli -a --id-only | head -n 1)" --share "$IMGPATH"'
-#bindsym $mod+p exec grim -g "$(slurp)" - | wl-copy && notify-send -t 4000 "📷   Copied to Clipboard" 
+bindsym $mod+p exec grim -g "$(slurp)" - | wl-copy && notify-send -t 4000 "📷   Copied to Clipboard" 
 bindsym $mod+Ctrl+p exec notify-send -t 4000 "🎨 Select Hex Colour" && grim -g "$(slurp -p)" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:- | tail -n 1 | cut -d ' ' -f 4 | wl-copy && notify-send -t 4000 "🎨 Grepped to Clipboard"
 
 ## Quick Change Sway Config
-bindsym $mod+Shift+y exec $tty -e nvim -n ~/.config/sway/config
+bindsym $mod+Shift+y exec $edit-sway-config
 
 ## System Resources
-bindsym $mod+h exec $tty -e $systemresources 
+bindsym $mod+t exec $tty -e $systemresources 
+
 
 ## Disabled:
 # Quick Notes
@@ -489,9 +572,11 @@ bindsym $mod+h exec $tty -e $systemresources
 
 ## Mpv Open Clipboard Link
 # bindsym $mod+m exec ~/.config/sway/scripts/paste_mpv
-########################################################################################
-########################################################################################
+# bindsym f12 exec mpv --fullscreen --player-operation-mode=pseudo-gui -- %U
+# bindsym f11 exec pkill mpv
 
+########################################################################################
+########################################################################################
 
 
 ################################# Sway Window Decorators ###############################
@@ -531,4 +616,10 @@ client.urgent           #ff0000 #ff0000 #ff0000 #ffffff
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is the most common system tray GUI for it.
 # For sway, you might want to use sway's waybar or use NetworkManager's applet directly
+
+## Auto Reload Sway Config
+#exec sh ~/.config/sway/scripts/auto-reload-sway &
+
+## Alt Tab Daemon
+#exec_always "~/.config/sway/scripts/window-changer/sway_alt_tab daemon"
 #######################################################################################
