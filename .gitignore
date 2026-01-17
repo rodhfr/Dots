@@ -1,0 +1,14 @@
+.env
+env
+devbox/.cache
+devbox/.gnupg
+devbox/Downloads
+devbox/.local
+devbox/.mozilla
+devbox/.ssh/
+devbox/Code/
+devbox/.pki
+devbox/.config/google-chrome/
+devbox/.bash_history
+devbox/.config/go/
+devbox/.config/mozilla/
